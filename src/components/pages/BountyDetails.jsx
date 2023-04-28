@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import BountyForm from "../partials/BountyForm"
 import axios from "axios"
+
 
 export default function BountyDetails() {
     // hold the bounty we are currently looking at
@@ -10,6 +11,7 @@ export default function BountyDetails() {
     const [showForm, setShowForm] = useState(false)
 
     const { id } = useParams()
+    const navigate = useNavigate()
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_SERVER_URL}/bounties/${id}`)
@@ -29,6 +31,16 @@ export default function BountyDetails() {
             setBounty(putResponse.data.result)
             setShowForm(false)
 
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const handleDeleteClick = async () => {
+        try {
+            await axios.delete(`${process.env.REACT_APP_SERVER_URL}/bounties/${id}`)
+            // navigate to the home page
+            navigate("/") // any react router dom route
         } catch (err) {
             console.log(err)
         }
@@ -55,6 +67,8 @@ export default function BountyDetails() {
             <p>last seen at {bounty.lastSeen} traveling in {bounty.ship}</p>
 
             <p>{bounty.captured ? "in captivity" : "still at large"}</p>
+
+            <button onClick={handleDeleteClick}>Delete Bounty</button>
         </>
     )
     
