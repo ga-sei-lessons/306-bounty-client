@@ -34,7 +34,7 @@ export default function Home() {
         ship: "",
         reward: 0,
         captured: false,
-        lastSend: ""
+        lastSeen: ""
     }
 
     const bountyListItems = bounties.map(bounty => {
